@@ -1,0 +1,10 @@
+/node_modules/*
+/cartouches/assets/
+/cartouches/axo/
+/cartouches/cellules/
+/cartouches/css/fonts/
+/cartouches/fonts/
+/cartouches/images/
+/cartouches/libs/
+/cartouches/panos_aerien/
+/cartouches/PDV/
