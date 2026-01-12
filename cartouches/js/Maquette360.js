@@ -2829,12 +2829,28 @@ function moveEtiquetteHTML(id, pos) {
 
 	// console.log(getElemById(id))
 
-	current_lot = getElemById(id);
-	let pos_in_canvas = { x: pos.x, y: pos.y };
+	current_lot = getElemById(id)
+	let pos_in_canvas = { x: pos.x, y: pos.y }
 	let canvasCenter = { x: Math.round(canvasSize.width / 2), y: Math.round(canvasSize.height / 2) }
 	
-	pos_in_canvas.x += (1 - zoomValue) * (canvasCenter.x - pos_in_canvas.x);
-	pos_in_canvas.y += (1 - zoomValue) * (canvasCenter.y - pos_in_canvas.y);
+
+	// deplace
+	let deplacedAxo = {
+		x: (1 - zoomValue) * (960 - exportRoot.Axo.x),
+		y: (1 - zoomValue) * (540 - exportRoot.Axo.y) 
+	}
+	let deplacedAxo2 = {
+		x: (exportRoot.Axo.x - 960),
+		y: (exportRoot.Axo.y - 540) 
+	}
+	console.log(`deplacedAxo ${Math.round(deplacedAxo.x)} - ${Math.round(deplacedAxo.y)}`)
+	console.log(`deplacedAxo2 ${Math.round(deplacedAxo2.x)} - ${Math.round(deplacedAxo2.y)}`)
+
+	pos_in_canvas.x += (1 - zoomValue) * (canvasCenter.x - pos_in_canvas.x)
+	pos_in_canvas.y += (1 - zoomValue) * (canvasCenter.y - pos_in_canvas.y)
+
+	pos_in_canvas.x += deplacedAxo2.x
+	pos_in_canvas.y += deplacedAxo2.y
 	
 	let pos_outside_canvas = { x: 0, y: 0 };
 	pos_outside_canvas.x = ((pos_in_canvas.x / canvasSize.width) * canvas_rect.w + canvas_rect.x);
@@ -2849,13 +2865,8 @@ function moveEtiquetteHTML(id, pos) {
 	etiquette_pos.x = pos_outside_canvas.x;
 	etiquette_pos.y = pos_outside_canvas.y;
 
-	// deplace
-
 	
 
-	
-
-	// console.log(etiquette_pos)
 
 }
 
@@ -3033,7 +3044,6 @@ function openLightboxAerien(elem, index) {
 /***************************************/
 var isCursorSlider = false;
 var isPointerMoving = false;
-var theAxoScreen = null
 function addOrbitaleGestureControler() {
 
 	var theAxoScreen = exportRoot.Axo;
@@ -3260,7 +3270,7 @@ function moveScreen(mousePosX, mousePosY) {
 
 	// TODO change static canvas size 1920 * 1080 to dynamic var
 
-	theAxoScreen = exportRoot.Axo
+	var theAxoScreen = exportRoot.Axo
 
 	if (zoomValue > 1.0 && deplace) {
 
