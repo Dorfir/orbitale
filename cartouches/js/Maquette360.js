@@ -91,7 +91,7 @@ var epaisseurCroix = 0.75;
 var tailleCroix = 5;
 
 /* Etiquette des lots en HTML */
-var isEtiquetteHTML = false;
+var isEtiquetteHTML = true;
 
 /* Graphic etiquettes lots */
 var decalPuce = newVector2D(0, 0);
@@ -580,7 +580,7 @@ $(document).ready(function () {
 
 	$('#tri_menu_gauche_buttons_subcontainer').on('click', function (e) {
 		if (e.target !== this) return;
-		closeVideoAndGalerie();
+		closeVideoGalerieMap();
 	})
 	if (is_galerie_active) initGalerie();
 	if (is_video_active) initVideo();
@@ -711,7 +711,9 @@ function resizeCanvas() {
 		etiquette_html.classList.add('xlarge');
 	}
 
-	if (current_lot !== null) { rotateLabel(current_lot); }
+	// console.log(current_lot)
+	// if (current_lot !== null) { rotateLabel(current_lot) }
+	if (panelOpen && current_lot) rotateLabel(current_lot)
 
 	etiquette_html.style.left = etiquette_pos.x + "px";
 	etiquette_html.style.top = etiquette_pos.y + "px";
@@ -1528,10 +1530,10 @@ function initGalerie() {
 
 	$('#galerie_bigcontainer').on('click', function (e) {
 		if (e.target !== this) return;
-		closeVideoAndGalerie();
+		closeVideoGalerieMap();
 	});
 	$('#galerie_close').on('click', function (e) {
-		closeVideoAndGalerie();
+		closeVideoGalerieMap();
 	});
 
 	var galerie_elements = $('img', '#galerie_container').toArray();
@@ -1591,7 +1593,7 @@ function initVideo() {
 
 	$('#video_bigcontainer').on('click', function (e) {
 		if (e.target !== this) return;
-		closeVideoAndGalerie();
+		closeVideoGalerieMap();
 	});
 
 
@@ -1603,9 +1605,11 @@ function resetVideo() {
 	video_orbitale.currentTime = 0;
 }
 
-function closeVideoAndGalerie() {
-	closeGalerie();
-	closeVideo();
+function closeVideoGalerieMap() {
+	closeGalerie()
+	closeVideo()
+	// closeMap()
+	
 }
 
 function closeVideo() {
@@ -2375,6 +2379,9 @@ function actionOnCell(elem) {
 
 	console.log("actionOnCell : " + elem.nom);
 
+	
+	current_lot = elem
+
 	let panel = elem.cell
 
 	if (panelOpen) {
@@ -2799,6 +2806,8 @@ function hidePDF() {
 }
 
 function movePanel(id, panel, pos, offset) {
+
+	// console.log('-- movePanel()')
 	
 	if (panelOpen) {
 		panel.x = pos.x + offset.x + arrangePanel.x;
@@ -2817,6 +2826,8 @@ function moveEtiquetteHTML(id, pos) {
 	// console.log('-- moveEtiquetteHTML')
 	// console.log("id :", id)
 	// console.log("pos :", pos)
+
+	// console.log(getElemById(id))
 
 	current_lot = getElemById(id);
 	let pos_in_canvas = { x: pos.x, y: pos.y };
@@ -2838,6 +2849,12 @@ function moveEtiquetteHTML(id, pos) {
 	etiquette_pos.x = pos_outside_canvas.x;
 	etiquette_pos.y = pos_outside_canvas.y;
 
+	// deplace
+
+	
+
+	
+
 	// console.log(etiquette_pos)
 
 }
@@ -2845,8 +2862,14 @@ function moveEtiquetteHTML(id, pos) {
 function rotateLabel(elem) {
 
 	// console.log('-- rotateLabel')
+	// console.error(elem)
+	// if (elem) console.error(elem)
+
+	if (elem === null) return false
 	
 	if (elem.cat !== "nozone") {
+		// console.log(elem)
+		// console.log(elem.id)
 		if (elem.cell === currentPlan) movePanel(elem.id, panel_lib, elem.coord[currentFrame], offsetPanel);
 		elem.cell.visible = !elem.hidden;
 	} else {
@@ -3010,6 +3033,7 @@ function openLightboxAerien(elem, index) {
 /***************************************/
 var isCursorSlider = false;
 var isPointerMoving = false;
+var theAxoScreen = null
 function addOrbitaleGestureControler() {
 
 	var theAxoScreen = exportRoot.Axo;
@@ -3236,7 +3260,7 @@ function moveScreen(mousePosX, mousePosY) {
 
 	// TODO change static canvas size 1920 * 1080 to dynamic var
 
-	var theAxoScreen = exportRoot.Axo
+	theAxoScreen = exportRoot.Axo
 
 	if (zoomValue > 1.0 && deplace) {
 
@@ -3264,6 +3288,8 @@ function moveScreen(mousePosX, mousePosY) {
 		) {
 			theAxoScreen.y = next_center.y
 		}
+
+		// console.log(`axoScreen : ${theAxoScreen.x}, ${theAxoScreen.y}`)
 
 	}
 
@@ -3482,7 +3508,7 @@ function tri_init_interface() {
 		// Restaure volet de recherche (en cas de seconde ouverture)
 		$('#tri_menu_gauche').removeClass('step02').addClass('step01');
 		$('#tri_menu_gauche').addClass('open');
-		closeVideoAndGalerie();
+		closeVideoGalerieMap();
 	});
 	$('#tri_button_close_volet').on('click', function () {
 		tri_close_volet();
@@ -4475,7 +4501,7 @@ function initFavoris() {
 	// OUVERTURE FERMETURE VOLET FAVORIS
 	$('#fav_button_open_volet').on('click', function () {
 		displayFavoris();
-		closeVideoAndGalerie();
+		closeVideoGalerieMap();
 		$('#MODAL-favoris').addClass('open');
 	});
 	$('.close-fav').on('click', function () {
