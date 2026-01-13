@@ -2834,17 +2834,12 @@ function moveEtiquetteHTML(id, pos) {
 	let canvasCenter = { x: Math.round(canvasSize.width / 2), y: Math.round(canvasSize.height / 2) }
 	
 
-	// deplace
-	let deplacedAxo = {
-		x: (1 - zoomValue) * (960 - exportRoot.Axo.x),
-		y: (1 - zoomValue) * (540 - exportRoot.Axo.y) 
-	}
+	// deplace - panneautage
 	let deplacedAxo2 = {
 		x: (exportRoot.Axo.x - 960),
 		y: (exportRoot.Axo.y - 540) 
 	}
-	console.log(`deplacedAxo ${Math.round(deplacedAxo.x)} - ${Math.round(deplacedAxo.y)}`)
-	console.log(`deplacedAxo2 ${Math.round(deplacedAxo2.x)} - ${Math.round(deplacedAxo2.y)}`)
+	
 
 	pos_in_canvas.x += (1 - zoomValue) * (canvasCenter.x - pos_in_canvas.x)
 	pos_in_canvas.y += (1 - zoomValue) * (canvasCenter.y - pos_in_canvas.y)
